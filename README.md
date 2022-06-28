@@ -9,13 +9,13 @@
 This repository contains the code for EDA, Predictive analysis using Logistic Regression model, Random Forest model and Gradient Boosted (XGBoost) Regression model, along with evaluation of the performance metrics of these models
 
 ### Table of Contents
-Abstract
-Requirements
-Repository Content
-Data Preparation
-Methodology
-Model Evaluation
-Conclusions
+- Abstract
+- Requirements
+- Repository Content
+- Data Preparation
+- Methodology
+- Model Evaluation
+- Conclusions
 
 ### Abstract
 #### Context
