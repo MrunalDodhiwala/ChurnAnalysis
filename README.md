@@ -84,14 +84,6 @@ The dataset is available on Kaggle link given above. The dataset has no missing 
 | Conclusions	| Interpret results against evaluation metrics, conclude business insights and present findings |
 
 ### Model Evaluation
-The evaluation of the 3 models is as follows:
-
-| Model	| Logistic Regression	| Random Forest	| XGBoost |
-| ----- | ------------------- |-------------- | ------- |
-| Recall	| 0.43	| 0.73	| 0.84 |
-| Accuracy	| 0.88	| 0.95	| 0.97 |
-| Precision	| 0.69	| 0.91	| 0.93 |
-| F1 score	| 0.53	| 0.81	| 0.88 |
 
 
 
