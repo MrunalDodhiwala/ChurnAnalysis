@@ -63,11 +63,11 @@ The models will be evaluated on the following metrics:
 
 ### Repository Content
 The content of this repository is:
--	Readme file explaining the overall project structure
--	Rmd file includes code to perform Exploratory Data Analysis, including pre-processing, One-Hot encoding, Univariate analysis of each attribute, Bi-variate analysis to show the relation of each attribute with class attribute, and correlation matrix
--	PDF format of the above Rmd file
--	Ipynb file includes code to predict which customers are likely to churn. The models used for prediction include Logistic Regression model, Random Forest model and Gradient Boosted (XGBoost) Regression model. The models are evaluated over mean recall, accuracy, precision, F1 scores and execution time.
--	PDF format of the above Ipynb file
+-	README.md file explaining the overall project structure
+-	RMD file includes code to perform Exploratory Data Analysis, including pre-processing, One-Hot encoding, Univariate analysis of each attribute, Bi-variate analysis to show the relation of each attribute with class attribute, and correlation matrix
+-	HTML format of the above RMD file
+-	IPYNB file includes code to predict which customers are likely to churn. The models used for prediction include Logistic Regression model, Random Forest model and Gradient Boosted (XGBoost) Regression model. The models are evaluated over mean recall, accuracy, precision, F1 scores and execution time.
+-	HTML format of the above IPYNB file
 
 ### Data Preparation
 The dataset is available on Kaggle link given above. The dataset has no missing values. Pre-preparation involved converting attributes into categorical factors, one-hot encoding for categorical variables, removing redundant variables, balancing the dataset by oversampling the minority class.
