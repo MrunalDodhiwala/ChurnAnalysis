@@ -89,13 +89,11 @@ Currently, only 1 model was tested i.e. Logistic Regression. The other models wi
 
 | Model   | Logistic Regression before SMOTE | Logistic Regression after SMOTE |
 | ------- | -------------------------------- | ------------------------------- |
-| Measure	| Average Scores    | Std Dev      | Average Scores    | Std Dev     |
-| ------- | ----------------- | ------------ | ----------------- | ----------- |
-| Recall	| 0.42	| 0.06	| 0.78	| 0.04 |
-| Accuracy	| 0.87	| 0.01	| 0.81	| 0.02 |
-| Precision	| 0.68	| 0.05	| 0.45	| 0.03 |
-| F1 score	| 0.52	| 0.05	| 0.57	| 0.03 |
-| Mean ROC AUC	| 0.88	| 0.01	| 0.88	| 0.01 |
+| Recall	| 0.42	| 0.78	|
+| Accuracy	| 0.87	| 0.81	|
+| Precision	| 0.68	| 0.45	|
+| F1 score	| 0.52	| 0.57	|
+| Mean ROC AUC	| 0.88	| 0.88 |
 | Execution Time	| 0.25 sec	|	9.5 sec	|
 
 
