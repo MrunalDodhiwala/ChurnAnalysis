@@ -4,7 +4,7 @@
 ##### Big Data Analytics - Classification Project
 
 ### Repository Content
-This repository contains the code for EDA, Predictive analysis using Logistic Regression model, Random Forest model and Gradient Boosted (XGBoost) Regression model, along with evaluation of the performance metrics of these models
+This repository contains the code for EDA, Predictive analysis using Logistic Regression model, Random Forest model (will be uploaded later) and Gradient Boosted (XGBoost) Regression model (will be uploaded later), along with evaluation of the performance metrics of these models
 
 ### Table of Contents
 - Abstract
