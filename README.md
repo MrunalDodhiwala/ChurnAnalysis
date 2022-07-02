@@ -88,6 +88,7 @@ The dataset is available on Kaggle link given above. The dataset has no missing 
 Currently, only 1 model was tested i.e. Logistic Regression. The other models will be tested later. The model was run on the original dataset that was imbalanced, and after balancing the training dataset. The balancing technique used was oversampling with SMOTE. Dataset is split into train/test set in the ratio of 70:30, and then 10-fold cross validation is done. The average scores of 10-fold cross-validation before and after SMOTE are tabulated below:
 
 | Model   | Logistic Regression before SMOTE | Logistic Regression after SMOTE |
+| ------- | -------------------------------- | ------------------------------- |
 | Measure	| Average Scores    | Std Dev      | Average Scores    | Std Dev     |
 | ------- | ----------------- | ------------ | ----------------- | ----------- |
 | Recall	| 0.42	| 0.06	| 0.78	| 0.04 |
