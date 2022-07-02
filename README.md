@@ -94,7 +94,7 @@ Currently, only 1 model was tested i.e. Logistic Regression. The other models wi
 | Precision	| 0.68	| 0.45	|
 | F1 score	| 0.52	| 0.57	|
 | Mean ROC AUC	| 0.88	| 0.88 |
-| Execution Time	| 0.25 sec	|	9.5 sec	|
+| Execution Time	| 0.25 sec	|	10.7 sec	|
 
 
 ### Conclusions
