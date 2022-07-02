@@ -1,9 +1,7 @@
 # Predicting likelihood of churn and understanding factors that cause churn, with the aim of reducing churn
 
 ##### Author: Mrunal Dodhiwala
-##### Course: CIND 820 Big Data Analytics Project
-##### Program: Data Analytics, Big Data & Predictive Analytics
-##### Supervisor: Dr. Sedef Akinli Kocak
+##### Big Data Analytics - Classification Project
 
 ### Repository Content
 This repository contains the code for EDA, Predictive analysis using Logistic Regression model, Random Forest model and Gradient Boosted (XGBoost) Regression model, along with evaluation of the performance metrics of these models
@@ -84,7 +82,7 @@ The dataset is available on Kaggle link given above. The dataset has no missing 
 | Conclusions	| Interpret results against evaluation metrics, conclude business insights and present findings |
 
 ### Model Evaluation
-
+Currently, only 1 model was tested i.e. Logistic Regression. The other models will be tested later. The model was run on the original dataset that was imbalanced, and after balancing the training dataset. The balancing technique used was oversampling with SMOTE. Dataset is split into train/test set in the ratio of 70:30, and then 10-fold cross validation is done. The average scores of 10-fold cross-validation before and after SMOTE are tabulated below:
 
 
 ### Conclusions
