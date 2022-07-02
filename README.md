@@ -33,7 +33,8 @@ https://www.kaggle.com/datasets/sakshigoyal7/credit-card-customers
 This dataset contains 10,127 customers and 21 attributes, including the class attribute ‘Attrition_Flag’. The attributes include:
 -	Demographic details like Age, Gender, Number of Dependents, Education Level, Marital Status, Income Category, 
 -	Business info including Card category, Months the customer has been with the bank, Total relationships of customer with the bank, number of times customer has contacted the bank
--	Credit Card usage info including Months of inactivity in last 12 months, Credit limit, Revolving balance, Average open to buy, Total transaction amount, Amt change in Q4 compared to Q1, Total transaction count, count change in Q4 compared to Q1, Utilization ratio. The dataset has no missing values.
+-	Credit Card usage info including Months of inactivity in last 12 months, Credit limit, Revolving balance, Average open to buy, Total transaction amount, Amt change in Q4 compared to Q1, Total transaction count, count change in Q4 compared to Q1, Utilization ratio.
+The dataset has no missing values.
 
 #### Techniques and Tools
 R has been used for Exploratory Data Analysis. This includes:
@@ -44,15 +45,15 @@ R has been used for Exploratory Data Analysis. This includes:
 
 Python has been used for modelling, predictive analysis, and model evaluation. The models used for classification prediction are:
 -	Logistic Regression
--	Random Forest
--	XGBoost
+-	Random Forest (later)
+-	XGBoost (later)
 
 The models will be evaluated on the following metrics:
 -	Recall, primary metric since the aim is to reduce churn
 -	Accuracy
 -	Precision
 -	F1score
--	Time taken
+-	Execution Time
 
 
 ### Requirements
@@ -64,7 +65,9 @@ The models will be evaluated on the following metrics:
 The content of this repository is:
 -	Readme file explaining the overall project structure
 -	Rmd file includes code to perform Exploratory Data Analysis, including pre-processing, One-Hot encoding, Univariate analysis of each attribute, Bi-variate analysis to show the relation of each attribute with class attribute, and correlation matrix
--	Ipynb file includes code to predict which customers are likely to churn. The models used for prediction include Logistic Regression model, Random Forest model and Gradient Boosted (XGBoost) Regression model. The models are evaluated over mean recall, accuracy, precision and F1 scores.
+-	PDF format of the above Rmd file
+-	Ipynb file includes code to predict which customers are likely to churn. The models used for prediction include Logistic Regression model, Random Forest model and Gradient Boosted (XGBoost) Regression model. The models are evaluated over mean recall, accuracy, precision, F1 scores and execution time.
+-	PDF format of the above Ipynb file
 
 ### Data Preparation
 The dataset is available on Kaggle link given above. The dataset has no missing values. Pre-preparation involved converting attributes into categorical factors, one-hot encoding for categorical variables, removing redundant variables, balancing the dataset by oversampling the minority class.
@@ -83,6 +86,16 @@ The dataset is available on Kaggle link given above. The dataset has no missing 
 
 ### Model Evaluation
 Currently, only 1 model was tested i.e. Logistic Regression. The other models will be tested later. The model was run on the original dataset that was imbalanced, and after balancing the training dataset. The balancing technique used was oversampling with SMOTE. Dataset is split into train/test set in the ratio of 70:30, and then 10-fold cross validation is done. The average scores of 10-fold cross-validation before and after SMOTE are tabulated below:
+
+| 	            | Logistic Regression before SMOTE       | Logistic Regression after SMOTE       |
+| 	            | Average Scores | Std Dev  | Average Scores | Std Dev  |
+| ----------------- | ---------------------------------------------------------------------- |
+| Recall	| 0.42	| 0.06	| 0.78	| 0.04 |
+| Accuracy	| 0.87	| 0.01	| 0.81	| 0.02 |
+| Precision	| 0.68	| 0.05	| 0.45	| 0.03 |
+| F1 score	| 0.52	| 0.05	| 0.57	| 0.03 |
+| Mean ROC AUC	| 0.88	| 0.01	| 0.88	| 0.01 |
+| Execution Time	| 0.25 sec	|	9.5 sec	|
 
 
 ### Conclusions
