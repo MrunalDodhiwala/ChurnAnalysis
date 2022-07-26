@@ -1,0 +1,481 @@
+---
+title: "CardChurnWorking"
+author: "Mrunal"
+date: "04/06/2022"
+output:
+  html_document: default
+  pdf_document: default
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+## R Markdown
+
+This is an R Markdown document. Markdown is a simple formatting syntax for authoring HTML, PDF, and MS Word documents. For more details on using R Markdown see <http://rmarkdown.rstudio.com>.
+
+When you click the **Knit** button a document will be generated that includes both content as well as the output of any embedded R code chunks within the document. You can embed an R code chunk like this:
+
+Reading the File
+```{r}
+filePath<-"C:/Users/mruna/Documents/Dataset_BankChurners.csv"
+ChurnDataV1<-read.csv(filePath, header=T, stringsAsFactors=F, na.strings=c("", "NA"))
+```
+
+Overview of Dataset
+```{r}
+str(ChurnDataV1)
+```
+
+Converting to Factors
+```{r}
+ChurnDataV1$Attrition_Flag<-factor(ChurnDataV1$Attrition_Flag, labels=c("Attrited", "Existing"))
+ChurnDataV1$Gender<-factor(ChurnDataV1$Gender, labels=c("Female", "Male"))
+ChurnDataV1$Education_Level<-factor(ChurnDataV1$Education_Level, labels=c("College", "Doctorate", "Graduate", "High School", "Post Graduate", "Uneducated", "Unknown"))
+ChurnDataV1$Marital_Status<-factor(ChurnDataV1$Marital_Status, labels=c("Divorced", "Married", "Single", "Unknown"))
+ChurnDataV1$Income_Category<-factor(ChurnDataV1$Income_Category, labels=c("$120K+", "$40K-$60K", "$60K-$80K", "$80K-$120K", "Less than $40K", "Unknown"))
+ChurnDataV1$Card_Category<-factor(ChurnDataV1$Card_Category, labels=c("Blue", "Gold", "Platinum", "Silver"))
+```
+
+Overview of Dataset
+```{r}
+str(ChurnDataV1)
+```
+```{r}
+summary(ChurnDataV1)
+```
+Standard Deviation
+```{r}
+ChurnDataNum<-ChurnDataV1[c(2,4,9,10,11,12,13,14,15,16,17,18,19,20)]
+apply(ChurnDataNum, 2, sd)
+```
+Coefficient of Variation
+```{r}
+sd(ChurnDataNum$Avg_Utilization_Ratio)/mean(ChurnDataNum$Avg_Utilization_Ratio)
+```
+
+One Hot Encoding
+```{r}
+library(ggplot2)
+library(lattice)
+library(caret)
+dummy <- dummyVars(" ~ .", data=ChurnDataV1)
+ChurnDataV2 <- data.frame(predict(dummy, newdata=ChurnDataV1))
+```
+
+Check the Dataframe
+```{r}
+str(ChurnDataV2)
+```
+
+Correlation Matrix
+```{r}
+#install.packages(corrplot)
+library(corrplot)
+corrMatrix<-cor(ChurnDataV2)
+corrplot(corrMatrix, tl.cex=0.5, type="lower", insig="blank")
+```
+
+Churn Distribution - Pie Chart
+```{r}
+#install.packages("plotrix")
+library(plotrix)
+attritionTable<-table(ChurnDataV1$Attrition_Flag)
+pie3D(attritionTable, main="Churn Distribution", labels = paste0(round(attritionTable/sum(attritionTable)*100, 0), "%"), border="white", col = rainbow(length(attritionTable)))
+legend("topright", legend=levels(ChurnDataV1$Attrition_Flag), cex = 0.8, fill = rainbow(length(attritionTable)))
+```
+
+Age Distribution - Histogram
+```{r}
+hist(ChurnDataV1$Customer_Age, breaks=c(20:75),
+     main="",
+     xlab="Age",
+     xlim = c(25,75), ylim = c(0,500))
+```
+
+Gender Distribution - Pie Chart
+```{r}
+#install.packages("lessR")
+library(lessR)
+gender <- data.frame(gend = ChurnDataV1$Gender)
+PieChart(gend, hole = 0.5, values = "%", values_color = "black", data = gender,
+         fill = "terrain", main="")
+```
+
+Gender vs Churn Table with %
+```{r}
+#install.packages("janitor")
+library(janitor)
+ChurnDataV1 %>%
+  tabyl(Gender, Attrition_Flag) %>%
+  adorn_percentages("row") %>%
+  adorn_pct_formatting(digits=0)
+```
+
+Number of Dependents - Pie Chart
+```{r}
+#install.packages("plotrix")
+library(plotrix)
+dependentTable<-table(ChurnDataV1$Dependent_count)
+pie3D(dependentTable, main="Number of Dependenets", labels = paste0(round(dependentTable/sum(dependentTable)*100, 0), "%"), explode=0.1, col = rainbow(length(dependentTable)))
+legend("topright", legend = c("0", "1", "2", "3", "4", "5"), cex = 0.8, fill = rainbow(length(dependentTable)))
+```
+
+Dependents vs Churn Table with %
+```{r}
+#install.packages("janitor")
+library(janitor)
+ChurnDataV1 %>%
+  tabyl(Dependent_count, Attrition_Flag) %>%
+  adorn_percentages("row") %>%
+  adorn_pct_formatting(digits=0)
+```
+
+Education Level - Pie Chart
+```{r}
+educationTable<-table(ChurnDataV1$Education_Level)
+pie(educationTable, main="Education Levels", labels = paste0(round(educationTable/sum(dependentTable)*100, 0), "%"), col = rainbow(length(educationTable)))
+legend("topright", legend=levels(ChurnDataV1$Education_Level), cex = 0.8, fill = rainbow(length(educationTable)))
+```
+
+Education vs Churn Table with %
+```{r}
+#install.packages("janitor")
+library(janitor)
+ChurnDataV1 %>%
+  tabyl(Education_Level, Attrition_Flag) %>%
+  adorn_percentages("row") %>%
+  adorn_pct_formatting(digits=0)
+```
+
+Marital Status - Pie Chart
+```{r}
+MaritalTable<-table(ChurnDataV1$Marital_Status)
+pie(MaritalTable, main="Marital Status", labels = paste0(round(MaritalTable/sum(MaritalTable)*100, 0), "%"), col = rainbow(length(MaritalTable)))
+legend("topright", legend=levels(ChurnDataV1$Marital_Status), cex = 0.8, fill = rainbow(length(MaritalTable)))
+```
+
+Marital Status vs Churn Table with %
+```{r}
+#install.packages("janitor")
+library(janitor)
+ChurnDataV1 %>%
+  tabyl(Marital_Status, Attrition_Flag) %>%
+  adorn_percentages("row") %>%
+  adorn_pct_formatting(digits=0)
+```
+
+Income Category - Pie Chart
+```{r}
+#install.packages("lessR")
+library(lessR)
+income <- data.frame(inc = ChurnDataV1$Income_Category)
+PieChart(inc, hole = 0.3, values = "%", values_color = "black", data = income,
+         fill = "terrain", main="Income Categories")
+```
+
+Income vs Churn Table with %
+```{r}
+#install.packages("janitor")
+library(janitor)
+ChurnDataV1 %>%
+  tabyl(Income_Category, Attrition_Flag) %>%
+  adorn_percentages("row") %>%
+  adorn_pct_formatting(digits=0)
+```
+
+Card Category - Pie Chart
+```{r}
+#install.packages("lessR")
+library(lessR)
+cardCat <- data.frame(card = ChurnDataV1$Card_Category)
+PieChart(card, hole = 0.3, values = "%", values_color = "black", data = cardCat,
+         fill = "terrain", main="Card Categories")
+```
+
+Months on Book - Histogram
+```{r}
+hist(ChurnDataV1$Months_on_book, breaks=c(10:57),
+     main="Length of Customer Association",
+     xlab="Months",
+     xlim = c(10,60), ylim = c(0,1000))
+```
+
+Months on Book vs Churn - Density Plot
+```{r}
+plot(density(ChurnDataV1$Months_on_book[which(ChurnDataV1$Attrition_Flag=="Existing")]),
+     xlim=c(10,60), main="Length of Relationship vs Churn",
+     xlab="Months on Book",
+     col="green", lty=1)
+lines(density(ChurnDataV1$Months_on_book[which(ChurnDataV1$Attrition_Flag=="Attrited")]),
+      col="red", lty=1)
+legend(10,0.11, legend=c("Existing","Attrited"),
+       col=c("green", "red"), lty=c(1,1))
+```
+
+Total Relationships - Histogram
+```{r}
+hist(ChurnDataV1$Total_Relationship_Count, breaks=c(0.5:6.5),
+     main="Total Relationships",
+     xlab="Number of Relationships")
+```
+
+Total Relationships vs Churn - Boxplot
+```{r}
+boxplot(ChurnDataV1$Total_Relationship_Count ~ ChurnDataV1$Attrition_Flag,
+        main="Relatiionships vs Churn", 
+        xlab="Churn", ylab="Number of Relationships",
+        col=c("red", "green", alpha=0.5),
+        outpch=21, outbg="black")
+```
+
+Total Relationships vs Churn - Stacked % Bar graph
+```{r}
+library(ggplot2)
+library(dplyr)
+#Additional field to get % values in the stacked bar graph
+RelationData <- ChurnDataV1%>%
+  dplyr::group_by(Total_Relationship_Count, Attrition_Flag)%>%
+  dplyr::tally()%>%
+  dplyr::mutate(percent=n/sum(n))
+
+ggplot(data = RelationData,aes(x= Total_Relationship_Count, y = n, fill = Attrition_Flag)) +
+  geom_bar(stat="identity", position ="fill") +
+  scale_x_continuous(breaks=c(1,2,3,4,5,6)) +
+  geom_text(aes(label=paste0(sprintf("%1.1f", percent*100),"%")),
+                     position=position_fill(vjust=0.5)) +
+  scale_y_continuous(labels = scales::percent) +
+  labs(title="Total Relationships vs Churn", x="Number of relationships", y="Percentage") +
+  theme_bw() + theme(panel.grid.major = element_blank(), panel.grid.minor = element_blank(), panel.border = element_blank(),
+    axis.line = element_line(colour = "black"))
+```
+
+Months Inactive - Histogram
+```{r}
+hist(ChurnDataV1$Months_Inactive_12_mon, breaks=c(-0.5:6.5),
+     main="Months Inactive - 12 month period",
+     xlab="Number of months when inactive")
+```
+
+Months Inactive vs Churn - Boxplot
+```{r}
+boxplot(ChurnDataV1$Months_Inactive_12_mon ~ ChurnDataV1$Attrition_Flag,
+        main="Months_Inactive vs Churn", 
+        xlab="Churn", ylab="Number of Months Inactive",
+        col=c("red", "green"),
+        outpch=21, outbg="black")
+```
+
+Contacts Count - Histogram
+```{r}
+hist(ChurnDataV1$Contacts_Count_12_mon, breaks=c(-0.5:6.5),
+     main="Total Contacts",
+     xlab="Number of Contacts")
+```
+
+Contacts vs Churn - Boxplot
+```{r}
+boxplot(ChurnDataV1$Contacts_Count_12_mon ~ ChurnDataV1$Attrition_Flag,
+        main="Contacts vs Churn", 
+        xlab="Churn", ylab="Number of Contacts",
+        col=c("red", "green"),
+        outpch=21, outbg="black")
+```
+
+Contacts vs Churn - Stacked % Bar graph
+```{r}
+library(ggplot2)
+library(dplyr)
+#Additional field to get % values in the stacked bar graph
+ContactData <- ChurnDataV1%>%
+  dplyr::group_by(Contacts_Count_12_mon, Attrition_Flag)%>%
+  dplyr::tally()%>%
+  dplyr::mutate(percent=n/sum(n))
+
+ggplot(data = ContactData,aes(x= Contacts_Count_12_mon, y = n, fill = Attrition_Flag)) +
+  geom_bar(stat="identity", position ="fill") +
+  scale_x_continuous(breaks=c(0,1,2,3,4,5,6)) +
+  geom_text(aes(label=paste0(sprintf("%1.1f", percent*100),"%")),
+                     position=position_fill(vjust=0.5)) +
+  scale_y_continuous(labels = scales::percent) +
+  labs(title="Customer Contacts vs Churn", x="Number of contacts", y="Percentage") +
+  theme_bw() + theme(panel.grid.major = element_blank(), panel.grid.minor = element_blank(), panel.border = element_blank(),
+    axis.line = element_line(colour = "black"))
+
+```
+
+Credit Limit - Histogram
+```{r}
+hist(ChurnDataV1$Credit_Limit,
+     main="Credit Limit", xlab="Credit Limit")
+```
+
+Credit Limit vs Churn - Density Plot
+```{r}
+plot(density(ChurnDataV1$Credit_Limit[which(ChurnDataV1$Attrition_Flag=="Existing")]),
+     xlim=c(1420,34520), main="Credit limit vs Churn",
+     xlab="Credit Limit",
+     col="green", lty=1)
+lines(density(ChurnDataV1$Credit_Limit[which(ChurnDataV1$Attrition_Flag=="Attrited")]),
+      col="red", lty=1)
+legend("topright", inset=.02, legend=c("Existing","Attrited"),
+       col=c("green", "red"), lty=c(1,1))
+```
+
+Total Revolving Balance - Histogram
+```{r}
+hist(ChurnDataV1$Total_Revolving_Bal,
+     main="Revolving Balance", xlab="Balance", las=2, xaxp=c(0,2600,13))
+abline(h=seq(0,2500,500), col="gray", lty="dotted")
+```
+
+Credit Limit vs Revolving Balance - Density Plot
+```{r}
+plot(density(ChurnDataV1$Credit_Limit),
+     xlim=c(0,34520), ylim=c(0,0.0010), las=1, main="Credit Limit vs Revolving Balance",
+     xlab="Amount in $",
+     col="green", lty=1)
+lines(density(ChurnDataV1$Total_Revolving_Bal),
+      col="red", lty=1)
+legend("topright", inset=.02, legend=c("Total Credit Limit","Revolving Balance"),
+       col=c("green", "red"), lty=c(1,1))
+```
+
+Total Transaction Count - Histogram
+```{r}
+hist(ChurnDataV1$Total_Trans_Ct,
+     main="Total Transactions Count", xlab="Number of Transactions",
+     xlim=c(0,140), xaxp=c(0,140,14), las=2, ylim=c(0,2000))
+abline(h=seq(0,2000,500), col="gray", lty="dotted")
+```
+
+Transaction Count vs Churn - Density Plot
+```{r}
+plot(density(ChurnDataV1$Total_Trans_Ct[which(ChurnDataV1$Attrition_Flag=="Existing")]),
+     xlim=c(0,140), ylim=c(0,0.045), main="Transaction Count vs Churn",
+     xlab="Number of Transactions",
+     col="green", lty=1)
+lines(density(ChurnDataV1$Total_Trans_Ct[which(ChurnDataV1$Attrition_Flag=="Attrited")]),
+      col="red", lty=1)
+legend("topright", inset=.02, legend=c("Existing","Attrited"),
+       col=c("green", "red"), lty=c(1,1))
+abline(h=seq(0,0.045,0.005), col="gray", lty="dotted")
+```
+
+Transaction Count vs Churn - Boxplot
+```{r}
+boxplot(ChurnDataV1$Total_Trans_Ct ~ ChurnDataV1$Attrition_Flag,
+        main="Transaction Count vs Churn", 
+        xlab="Churn", ylab="Number of Transactions",
+        col=c("red", "green"),
+        outpch=21, outbg="black")
+abline(h=seq(0,140,20), col="gray", lty="dotted")
+```
+
+Subset with only Transaction Count and Attrition Flag
+```{r}
+TxnDF<-subset(ChurnDataV1, select = c(Attrition_Flag, Total_Trans_Ct))
+str(TxnDF)
+```
+
+Churn Distribution with Transaction Count cut-off at 48 - Stacked % Bar graph
+```{r}
+library(ggplot2)
+library(dplyr)
+#New Column for Txn count indicator
+TxnDF$TxnCnt1<-ifelse(TxnDF$Total_Trans_Ct>=48, "Txn>=48", "Txn<48")
+#Additional field to get % values in the stacked bar graph
+TempTxnData1 <- TxnDF%>%
+  dplyr::group_by(TxnCnt1, Attrition_Flag)%>%
+  dplyr::tally()%>%
+  dplyr::mutate(percent=n/sum(n))
+
+ggplot(data = TempTxnData1,aes(x=TxnCnt1, y = n, fill = Attrition_Flag)) +
+  geom_bar(stat="identity", position ="fill") +
+  scale_x_discrete(breaks=c("Txn>=48", "Txn<48")) +
+  geom_text(aes(label=paste0(sprintf("%1.0f", percent*100),"%")),
+                     position=position_fill(vjust=0.5)) +
+  scale_y_continuous(labels = scales::percent) +
+  labs(title="Churn Distribution - Transaction Count cut-off at 48", x="Number of Transactions", y="Percentage") +
+  theme_bw() + theme(panel.grid.major = element_blank(), panel.grid.minor = element_blank(), panel.border = element_blank(),
+    axis.line = element_line(colour = "black"))
+```
+
+Transaction Count Change vs Churn - Histogram with density plot
+```{r}
+library(ggplot2)
+library(scales)
+ggplot(ChurnDataV1, aes(x=Total_Ct_Chng_Q4_Q1, color=Attrition_Flag, fill=Attrition_Flag)) + 
+  geom_histogram(aes(y=..density..), position = "identity", alpha=0.5)+
+  labs(title="Change in Number of Transactions", x="Percentage Change compared to Previous Quarter") +
+  scale_x_continuous(labels = percent) +
+  geom_density(alpha=.2) +
+  theme_classic() +
+  theme(legend.position = c(0.8,0.8))
+```
+
+Total Transaction Amount - Histogram
+```{r}
+hist(ChurnDataV1$Total_Trans_Amt,
+     main="Total Transaction Amount", xlab="Transaction Amount",
+     xlim=c(500,20000), las=1, ylim=c(0,3000))
+abline(h=seq(0,3000,500), col="gray", lty="dotted")
+```
+
+Transaction Amount vs Churn - Density Plot
+```{r}
+plot(density(ChurnDataV1$Total_Trans_Amt[which(ChurnDataV1$Attrition_Flag=="Existing")]),
+     xlim=c(0,19000), ylim = c(0,0.0007), main="Transaction Amount vs Churn",
+     xlab="Transaction Amount", ylab="",
+     las=1,
+     col="green", lty=1)
+lines(density(ChurnDataV1$Total_Trans_Amt[which(ChurnDataV1$Attrition_Flag=="Attrited")]),
+      col="red", lty=1)
+legend("topright", inset=.02, legend=c("Existing","Attrited"),
+       col=c("green", "red"), lty=c(1,1))
+abline(h=seq(0,0.0007,0.0001), col="gray", lty="dotted")
+```
+
+Utilization ratio - Histogram
+```{r}
+hist(ChurnDataV1$Avg_Utilization_Ratio,
+     main="Average Utilization Ratio", xlab="Utilization", las=1)
+abline(h=seq(0,3000,500), col="gray", lty="dotted")
+```
+
+Utlization Ratio vs Churn - Boxplot
+```{r}
+boxplot(ChurnDataV1$Avg_Utilization_Ratio ~ ChurnDataV1$Attrition_Flag,
+        main="Utilization vs Churn", 
+        xlab="Churn", ylab="Utilization Ratio",
+        col=c("red", "green"),
+        outpch=21, outbg="black")
+abline(h=seq(0,1,0.2), col="gray", lty="dotted")
+```
+
+Transaction Amount vs Churn - Density Plot
+```{r}
+plot(density(ChurnDataV1$Avg_Utilization_Ratio[which(ChurnDataV1$Attrition_Flag=="Existing")]),
+     main="Utilization Ratio vs Churn", xlab="Utilization ratio",
+     ylim=c(0,7), ylab = "", yaxt="n",
+     col="green", lty=1)
+lines(density(ChurnDataV1$Avg_Utilization_Ratio[which(ChurnDataV1$Attrition_Flag=="Attrited")]),
+      col="red", lty=1)
+legend("topright", inset=.02, legend=c("Existing","Attrited"),
+       col=c("green", "red"), lty=c(1,1))
+abline(h=seq(0,7,1), col="gray", lty="dotted")
+```
+
+Churn Distribution when Utilization Ratio = 0
+```{r}
+UtilizationTable<-table(ChurnDataV1$Attrition_Flag[which(ChurnDataV1$Avg_Utilization_Ratio==0)])
+UtilizationTable
+```
+
+Churn Distribution when Utilization Ratio = 0 - Pie Chart
+```{r}
+library(plotrix)
+pie3D(UtilizationTable, main="Churn Distribution when Utilization=0", labels = paste0(round(UtilizationTable/sum(UtilizationTable)*100, 0), "%"), border="white", col = rainbow(length(UtilizationTable)))
+legend("top", legend=levels(ChurnDataV1$Attrition_Flag), cex = 0.8, fill = rainbow(length(UtilizationTable)))
+```
