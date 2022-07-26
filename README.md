@@ -83,7 +83,7 @@ The dataset is available on Kaggle link given above. The dataset has no missing 
 |EDA	| Univariate analysis, Bi-variate analysis, Correlation matrix |
 | Experimental Design	| Train/test split, Oversampling with SMOTE, 10-fold Cross-validation |
 | Modelling	| Logistic Regression, Random Forest, XGBoost |
-| Model Evaluation	| Confusion Matrix, Recall, precision F1 scores, ROC AUC, accuracy and the time taken |
+| Model Evaluation	| Confusion Matrix, Recall, Precision, F1 score, ROC AUC, Accuracy and the time taken |
 | Conclusions	| Interpret results against evaluation metrics, conclude business insights and present findings |
 
 ### Model Evaluation
